@@ -1,0 +1,40 @@
+server:
+  port: 8081
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
+spring:
+  application:
+    name: OAUTH2-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: swiggy-app
+          uri: lb://SWIGGY-APP
+          predicates:
+            - Path=/swiggy/**
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: raksha
+            client-secret: 438FzgvSk0ywjD3j46a2gitOWgTbQs8T
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/raksha
+            user-name-attribute: preferred_username
+      resourceserver:
+        opaquetoken:
+          introspection-uri: http://localhost:8080/realms/raksha/protocol/openid-connect/token/introspect
+          client-id: raksha
+          client-secret: 438FzgvSk0ywjD3j46a2gitOWgTbQs8T
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
