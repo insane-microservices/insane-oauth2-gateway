@@ -1,8 +1,8 @@
-package spring.io.auth.mappers;
+package spring.io.fury.auth.mappers;
 
 import org.mapstruct.Mapper;
-import spring.io.auth.controllers.dtos.OAuth2UserDto;
-import spring.io.auth.model.OAuth2User;
+import spring.io.fury.auth.controllers.dtos.OAuth2UserDto;
+import spring.io.fury.auth.model.OAuth2User;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {

@@ -1,4 +1,4 @@
-package spring.io.auth.controllers.dtos;
+package spring.io.fury.auth.controllers.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

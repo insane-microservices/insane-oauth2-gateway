@@ -1,4 +1,4 @@
-package spring.io.auth.model;
+package spring.io.fury.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

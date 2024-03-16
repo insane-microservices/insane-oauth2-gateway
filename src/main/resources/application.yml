@@ -3,17 +3,10 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone : http://localhost:8761/eureka/
+      defaultZone : http://insane-service-registry:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 spring:
-  application:
-    name: OAUTH2-GATEWAY
-  cloud:
-    gateway:
-      routes:
-        - id: swiggy-app
-          uri: lb://SWIGGY-APP
-          predicates:
-            - Path=/swiggy/**
   security:
     oauth2:
       client:
@@ -22,19 +15,35 @@ spring:
             client-id: raksha
             client-secret: 438FzgvSk0ywjD3j46a2gitOWgTbQs8T
             authorization-grant-type: authorization_code
-            scope: openid,profile,email
+            scope: openid,profile,email,addresses,genders
             redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/realms/raksha
+            issuer-uri: http://keycloak.insane.com:8080/realms/raksha
             user-name-attribute: preferred_username
       resourceserver:
         opaquetoken:
-          introspection-uri: http://localhost:8080/realms/raksha/protocol/openid-connect/token/introspect
+          introspection-uri: http://keycloak.insane.com:8080/realms/raksha/protocol/openid-connect/token/introspect
+
           client-id: raksha
           client-secret: 438FzgvSk0ywjD3j46a2gitOWgTbQs8T
-  logging:
-    level:
-      org:
-        springframework:
-          security: DEBUG
+  application:
+    name: insane-oauth2-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+      routes:
+        - id: insane-resource-provider
+          uri: lb://insane-resource-provider
+          predicates:
+            - Path=/resources/**
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+app:
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
